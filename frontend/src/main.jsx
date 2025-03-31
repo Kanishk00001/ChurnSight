@@ -7,6 +7,10 @@ import About from './components/About.jsx'
 import { RouterProvider,createBrowserRouter, createRoutesFromElements,Route } from "react-router";
 import Contact from './components/Contact.jsx'
 import Team from './components/Team.jsx'
+import Telecom from './components/Telecom.jsx'
+import Credit from './components/Credit.jsx'
+import Retail from './components/Retail.jsx'
+import Travel from './components/Travel.jsx'
 
 
 const router=createBrowserRouter([
@@ -29,6 +33,22 @@ const router=createBrowserRouter([
       {
         path:"ourteam",
         element:<Team/>
+      },
+      {
+        path:"telecom",
+        element:<Telecom/>
+      },
+      {
+        path:"credit",
+        element:<Credit/>
+      },
+      {
+        path:"retail",
+        element:<Retail/>
+      },
+      {
+        path:"travel",
+        element:<Travel/>
       }
     ]
   }

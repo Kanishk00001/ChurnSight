@@ -29,8 +29,8 @@ export default function About() {
             <p className="mt-4 text-lg leading-relaxed">
               At{" "}
               <span className="font-semibold text-indigo-600">ChurnSite</span>,
-              we help businesses reduce customer churn using **AI-powered
-              predictive analytics**. Our platform identifies at-risk customers,
+              we help businesses reduce customer churn using <b>AI-powered
+              predictive analytics.</b> Our platform identifies at-risk customers,
               analyzes engagement patterns, and offers actionable retention
               strategies.
             </p>
@@ -112,7 +112,7 @@ export default function About() {
             <p className="mt-4 text-lg leading-relaxed">
               At{" "}
               <span className="font-semibold text-indigo-600">ChurnSite</span>,
-              wwe strive to empower businesses with data-driven retention
+              we strive to empower businesses with data-driven retention
               strategies, helping them maximize customer loyalty and long-term
               growth. Whether you’re a small startup or a large enterprise, our
               churn prediction platform gives you the tools you need to stay
