@@ -7,6 +7,8 @@ import pandas as pd
 flask_app = Flask(__name__)
 CORS(flask_app)
 model=pickle.load(open('model_creditcard.pkl', 'rb'))
+scaler = pickle.load(open('scalercredit.pkl', 'rb'))
+
 # Set pandas display options
 # pd.set_option('display.max_columns', None)  # Show all columns
 # pd.set_option('display.width', 1000)  # Increase the width of the display
@@ -64,9 +66,13 @@ def predict():
         df[column_name] = 1 if data["Card_Category"] == status else 0
     df = df.drop(columns=["Card_Category"])
      
-    
+    df_scaled = scaler.transform(df)  # Apply the scaling transformation
+
+    print(df_scaled)
+    df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
+
     # Make prediction with the model
-    prediction = model.predict(df)
+    prediction = model.predict(df_scaled)
     print("Prediction:", prediction)
     result = 'Churn' if prediction[0] == 1 else 'Not Churn'
 
