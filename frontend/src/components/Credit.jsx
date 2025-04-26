@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-
+import axios from 'axios';
 function Credit() {
-  const [formData,setFormData] =useState({
+  const [creditFormdata,setcreditFormdata] =useState({
     Customer_Age:"",
     Gender:"M",
     Dependent_count:"",
@@ -24,12 +24,19 @@ function Credit() {
   })
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setcreditFormdata({ ...creditFormdata, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
+    try {
+      const response = await axios.post('http://localhost:5000/api/creditcurn/predict', creditFormdata);
+      console.log('Prediction:', response.data);
+      alert(`Prediction Result: ${response.data.prediction}`);  // you can show result nicely on page too
+    } catch (error) {
+      console.error('Error sending data:', error);
+      alert('Error in prediction');
+    }
   }
   return (
     <section className="bg-gray-100 min-h-screen flex items-center justify-center py-10 px-6">
@@ -68,8 +75,8 @@ function Credit() {
               <option>Graduate</option>
               <option>Uneducated</option>
               <option>College</option>
-              <option>Post-Graduate</option>
-              <option>Doctorate</option>
+              <option>Others</option>
+              
             </select>
           </div>
           <div>
@@ -138,7 +145,7 @@ function Credit() {
 
           <div>
             <label className="text-gray-700 text-xl p-3">Total Amt Change from Q4 to Q1</label>
-            <input required name="Total_Amt_Chng_Q4_Q1" type="number" onChange={handleChange} className="input-field p-3 bg-gray-100 mt-1" placeholder="Enter  in percentage" />
+            <input required name="Total_Amt_Chng_Q4_Q1" type="text" onChange={handleChange} className="input-field p-3 bg-gray-100 mt-1" placeholder="Enter  in percentage" />
           </div>
 
           <div>
@@ -153,12 +160,12 @@ function Credit() {
 
           <div>
             <label className="text-gray-700 text-xl p-3">Total CT change from Q4 to Q1</label>
-            <input required name="Total_Ct_Chng_Q4_Q1" type="number" onChange={handleChange} className="input-field p-3 bg-gray-100 mt-1" placeholder="Enter in percentage" />
+            <input required name="Total_Ct_Chng_Q4_Q1" type="text" onChange={handleChange} className="input-field p-3 bg-gray-100 mt-1" placeholder="Enter in percentage" />
           </div>
           
           <div>
             <label className="text-gray-700 text-xl p-3">Average Utilization Ratio</label>
-            <input required name="Avg_Utilization_Ratio" type="number" onChange={handleChange} className="input-field p-3 bg-gray-100 mt-1" placeholder="Enter the Ratio" />
+            <input required name="Avg_Utilization_Ratio" type="text" onChange={handleChange} className="input-field p-3 bg-gray-100 mt-1" placeholder="Enter the Ratio" />
           </div>
           {/* Submit Button */}
           <div className="col-span-2 flex justify-center">

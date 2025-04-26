@@ -1,7 +1,9 @@
 import React from "react";
 import kanishk from "../assets/kanishk.jpeg"
-
+import etisha from "../assets/Etisha.jpeg"
+import Khusboo from "../assets/Khusboo.jpeg"
 import Harsh from "../assets/Harsh.jpeg"
+import Gunn from "../assets/Gunn.jpeg"
 export default function Team() {
   return (
     <section className="bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6">
@@ -22,7 +24,7 @@ export default function Team() {
           <div className="bg-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
             <img 
               className="w-40 h-40 mx-auto rounded-full object-cover shadow-md"
-              src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" 
+              src={etisha} 
               alt="Etish Jain"
             />
             <h2 className="mt-4 text-2xl font-semibold text-gray-800 ">Etisha Jain</h2>
@@ -33,7 +35,7 @@ export default function Team() {
           <div className="bg-white  rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
             <img 
               className="w-40 h-40 mx-auto rounded-full object-cover shadow-md"
-              src="https://images.unsplash.com/photo-1499470932971-a90681ce8530?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+              src={Gunn} 
               alt="Gunn Agarwal"
             />
             <h2 className="mt-4 text-2xl font-semibold text-gray-800">Gunn Agarwal</h2>
@@ -71,8 +73,8 @@ export default function Team() {
           <div className="bg-white  rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
             <img 
               className="w-40 h-40 mx-auto rounded-full object-cover shadow-md"
-              src="https://images.unsplash.com/photo-1499470932971-a90681ce8530?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-              alt="Mia"
+              src={Khusboo}
+              alt="Khushboo Solanki"
             />
             <h2 className="mt-4 text-2xl font-semibold text-gray-800">Khushboo Solanki</h2>
             <p className="text-gray-500">20233161</p>

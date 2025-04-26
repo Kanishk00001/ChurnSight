@@ -64,7 +64,7 @@ export default function Contact() {
           </p>
           <div className="flex items-center space-x-4">
             <span className="text-indigo-600 text-xl">📍</span>
-            <p className="text-gray-700">Patel Hostel,MNNIT Allahabad, Prayagraj, India</p>
+            <p className="text-gray-700">MNNIT Allahabad, Prayagraj, India</p>
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-indigo-600 text-xl">📧</span>
