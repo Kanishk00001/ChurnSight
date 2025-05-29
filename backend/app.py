@@ -6,13 +6,19 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 flask_app = Flask(__name__)
 CORS(flask_app)
-model=pickle.load(open('model_creditcard.pkl', 'rb'))
-scaler = pickle.load(open('scalercredit.pkl', 'rb'))
+model_credit=pickle.load(open('model_creditcard.pkl', 'rb'))
+scaler_credit = pickle.load(open('scalercredit.pkl', 'rb'))
+model_travel=pickle.load(open('model_travel.pkl', 'rb'))
+scaler_travel = pickle.load(open('scalertravel.pkl', 'rb'))
+model_retail=pickle.load(open('model_retail.pkl', 'rb'))
+model_telecom=pickle.load(open('model_telecom.pkl', 'rb'))  
+scaler_telecom = pickle.load(open('scalertelecom.pkl', 'rb'))
 
 # Set pandas display options
-# pd.set_option('display.max_columns', None)  # Show all columns
-# pd.set_option('display.width', 1000)  # Increase the width of the display
-# pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)  # Show all columns
+pd.set_option('display.width', 1000)  # Increase the width of the display
+pd.set_option('display.max_rows', None)
+
 def binary_encoding(tempdf,column,positive_value):
   tempdf=tempdf.copy()
   tempdf[column]=tempdf[column].apply(lambda x:1 if x==positive_value else 0)
@@ -24,7 +30,7 @@ def preprocess_income_category(inpt):
   inpt['Income_Category']=inpt['Income_Category'].apply(lambda x:income_map[x])
   return inpt
 @flask_app.route('/api/creditcurn/predict', methods=['POST'])
-def predict():
+def predict_credit():
     data = request.get_json(force=True)
     
     # Convert the received data to DataFrame
@@ -66,16 +72,121 @@ def predict():
         df[column_name] = 1 if data["Card_Category"] == status else 0
     df = df.drop(columns=["Card_Category"])
      
-    df_scaled = scaler.transform(df)  # Apply the scaling transformation
+    df_scaled = scaler_credit.transform(df)  # Apply the scaling transformation
 
-    print(df_scaled)
+    # print(df_scaled)
     df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
 
     # Make prediction with the model
-    prediction = model.predict(df_scaled)
+    prediction = model_credit.predict(df_scaled)
     print("Prediction:", prediction)
     result = 'Churn' if prediction[0] == 1 else 'Not Churn'
 
+    return jsonify({'prediction': result})
+
+@flask_app.route('/api/travelcurn/predict', methods=['POST'])
+def predict_travel():
+    data = request.get_json(force=True)
+    # print("Received data:", data)
+    # Convert the received data to DataFrame
+    df = pd.DataFrame([data])
+    # Convert all numeric columns to float or int
+    numeric_columns = [
+        'Age','ServicesOpted']
+    for col in numeric_columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+    df=binary_encoding(df,'FrequentFlyer','Yes')
+    df=binary_encoding(df,'AccountSyncedToSocialMedia','Yes')
+    df=binary_encoding(df,'BookedHotelOrNot','Yes')
+    income_map={"Middle Income": 2,"Low Income":1,"High Income":0,}
+    df['AnnualIncomeClass']=df['AnnualIncomeClass'].apply(lambda x:income_map[x])
+    # print(df.info())
+    # print(df.head())
+    df_scaled =scaler_travel.transform(df)  # Apply the scaling transformation
+    prediction =model_travel.predict(df_scaled)
+    print("Prediction:", prediction)
+    result = 'Churn' if prediction[0] == 1 else 'Not Churn'
+
+    return jsonify({'prediction': result})
+
+@flask_app.route('/api/retailcurn/predict', methods=['POST'])
+def predict_reail():
+    data = request.get_json(force=True)
+    print("Received data:", data)
+    df = pd.DataFrame([data])
+    
+    # Convert all numeric columns to float or int
+    numeric_columns = ["Tenure","CityTier","WarehouseToHome","HourSpendOnApp","NumberOfDeviceRegistered","SatisfactionScore","NumberOfAddress","Complain","OrderAmountHikeFromlastYear","CouponUsed","OrderCount","DaySinceLastOrder","CashbackAmount"]
+    
+    for col in numeric_columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        
+    print("Processed DataFrame:\n", df.head())
+    
+    try:
+        prediction = model_retail.predict(df)
+        print("Prediction:", prediction)
+        result = 'Churn' if prediction[0] == 1 else 'Not Churn'
+    except Exception as e:
+        print(f"Error during prediction: {e}")
+        result = 'Error during prediction'
+    
+    return jsonify({'prediction': result})
+
+@flask_app.route('/api/telecomcurn/predict', methods=['POST'])
+def predict_telecom():
+    data = request.get_json(force=True)
+    df = pd.DataFrame([data])
+    # Convert all numeric columns to float or int
+    numeric_columns=['tenure','MonthlyCharges','TotalCharges']
+    for col in numeric_columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+    
+    
+    expected_columns=['tenure',
+ 'MonthlyCharges',
+ 'TotalCharges',
+ 'gender_Male',
+ 'SeniorCitizen_Yes',
+ 'Partner_Yes',
+ 'Dependents_Yes',
+ 'PhoneService_Yes',
+ 'MultipleLines_No phone service',
+ 'MultipleLines_Yes',
+ 'InternetServiceTypes_Fiber optic',
+ 'InternetServiceTypes_No',
+ 'OnlineSecurity_No internet service',
+ 'OnlineSecurity_Yes',
+ 'OnlineBackup_No internet service',
+ 'OnlineBackup_Yes',
+ 'DeviceProtection_No internet service',
+ 'DeviceProtection_Yes',
+ 'TechSupport_No internet service',
+ 'TechSupport_Yes',
+ 'StreamingTV_No internet service',
+ 'StreamingTV_Yes',
+ 'StreamingMovies_No internet service',
+ 'StreamingMovies_Yes',
+ 'Contract_One year',
+ 'Contract_Two year',
+ 'PaperlessBilling_Yes',
+ 'PaymentMethod_Credit card (automatic)',
+ 'PaymentMethod_Electronic check',
+ 'PaymentMethod_Mailed check',
+ 'InternetService_Yes']
+    
+    # print(df.head())
+    
+    input_df_dummy = pd.get_dummies(df, dtype='int')
+
+    input_df_dummy = input_df_dummy.reindex(columns=expected_columns, fill_value=0)
+
+    scale_cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
+    input_df_dummy[scale_cols] = scaler_telecom.transform(input_df_dummy[scale_cols])
+    # print(input_df_dummy.head())
+    prediction = model_telecom.predict(input_df_dummy)
+    print("Prediction:", prediction)
+    result = 'Churn' if prediction[0] == 1 else 'Not Churn'
     return jsonify({'prediction': result})
 
 
