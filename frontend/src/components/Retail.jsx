@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-
+import axios from "axios";
 function Retail() {
   const [retailFormdata, setretailFormdata] = useState({
     Tenure: "",
     PreferredLoginDevice: "Mobile Phone",
-    CityTier: "",
+    CityTier: "1",
     WarehouseToHome: "",
     PreferredPaymentMode: "Debit Card",
     Gender: "Male",
@@ -26,9 +26,17 @@ function Retail() {
     setretailFormdata({ ...retailFormdata, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(retailFormdata);
+    // console.log(retailFormdata);
+    try {
+      const response = await axios.post('http://localhost:5000/api/retailcurn/predict', retailFormdata);
+      console.log('Prediction:', response.data);
+      alert(`Prediction Result: ${response.data.prediction}`);  // you can show result nicely on page too
+    } catch (error) {
+      console.error('Error sending data:', error);
+      alert('Error in prediction');
+    }
   };
   return (
     <section className="bg-gray-100 min-h-screen flex items-center justify-center py-10 px-6">
@@ -71,16 +79,21 @@ function Retail() {
             </select>
           </div>
           <div>
-            <label className="text-gray-800 text-xl p-3">City Tier</label>
-            <input
+            <label className="text-gray-700 text-xl p-3">
+              City Tier
+            </label>
+            <select
               name="CityTier"
               onChange={handleChange}
+              className="input-field mt-1 bg-gray-100 p-3"
               required
-              type="number"
-              className="input-field bg-gray-100 p-3 mt-1"
-              placeholder="Enter City Tier"
-            />
-          </div>
+            >
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              
+            </select>
+            </div>
 
           <div>
             <label className="text-gray-700 text-xl p-3">
@@ -257,7 +270,7 @@ function Retail() {
           </div>
           <div>
             <label className="text-gray-700 text-xl p-3">
-              Day Since Last Order
+              order Count
             </label>
             <input
               required
@@ -265,10 +278,35 @@ function Retail() {
               type="number"
               onChange={handleChange}
               className="input-field p-3 bg-gray-100 mt-1"
+              placeholder="Enter the order count"
+            />
+          </div>
+          <div>
+            <label className="text-gray-700 text-xl p-3">
+              Day Since Last Order
+            </label>
+            <input
+              required
+              name="DaySinceLastOrder"
+              type="number"
+              onChange={handleChange}
+              className="input-field p-3 bg-gray-100 mt-1"
               placeholder="Enter the days"
             />
           </div>
-          
+          <div>
+            <label className="text-gray-700 text-xl p-3">
+              Cashback Amount
+            </label>
+            <input
+              required
+              name="CashbackAmount"
+              type="text"
+              onChange={handleChange}
+              className="input-field p-3 bg-gray-100 mt-1"
+              placeholder="Enter the amount"
+            />
+          </div>
 
           {/* Submit Button */}
           <div className="col-span-2 flex justify-center">
