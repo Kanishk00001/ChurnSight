@@ -228,6 +228,7 @@ We welcome contributions! Please follow these steps:
 ## 👥 Authors
 
 - **Kanishk** - *Initial work* - [@Kanishk00001](https://github.com/Kanishk00001)
+- **Harsh**  - *developed mdels for churn predictions and web app* - [@HarshAgrawal7672](https://github.com/HarshAgrawal7672)
 
 ## 🙏 Acknowledgments
 
